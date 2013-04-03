@@ -7,7 +7,7 @@ $(function () {
     , myColor = false
     , myName = false;
 
-  var connection = io.connect('http://kittens-app.herokuapp.com/');
+  var connection = io.connect('http://kittens-chat.herokuapp.com/');
   
   connection.on('connect', function () {
     console.log('connecting');
