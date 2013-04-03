@@ -16,6 +16,12 @@ colors.sort(function() { return Math.random() > 0.5; } );
 exports.start = function(server) {
   var io = require('socket.io').listen(server);
   
+  //Heroku "doesn't support" Websockets yet
+  //https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku
+  io.configure(function() {
+    io.set('transports', ['xhr-polling']);
+    io.set('polling duration', 10);
+  });  
 
   io.sockets.on('connection', function (socket) {
     console.log('New friend connected!');
@@ -29,7 +35,6 @@ exports.start = function(server) {
     }
     
     socket.on('message', function (data) {
-      console.log(data);
       if (!(userName)) {
       //This is the first time we've seen them
         userName = htmlEntities(data);
