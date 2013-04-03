@@ -1,39 +1,21 @@
-* {
-  font-family:tahoma;
-  font-size:12px;
-  margin:0;
-  padding:0;
+html, body {
+    height:100%;
 }
-
-p {
-  line-height:18px;
+#wrap {
+    min-height:100%;
+    height:auto;
+    margin:0 auto -102px;
 }
-
-div {
-  width:500px;
-  margin-left:auto;
-  margin-right:auto;
+#footer {
+    height:102px;
+    background-color:#f5f5f5;
 }
-
-#content {
-  background:#ddd;
-  border-radius:5px;
-  border:1px solid #CCC;
-  margin-top:10px;
-  padding:5px;
+#input { 
+    height: 76px;
+    margin-top: 4px;
+    width: 470px;
 }
-
-#input {
-  border-radius:2px;
-  border:1px solid #ccc;
-  margin-top:10px;
-  width:400px;
-  padding:5px;
-}
-
-#status {
-  width:88px;
-  display:block;
-  float:left;
-  margin-top:15px;
+#send {
+    vertical-align: top;
+    margin-top: 8px;
 }

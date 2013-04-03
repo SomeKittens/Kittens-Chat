@@ -27,40 +27,41 @@ exports.start = function(server) {
     console.log('New friend connected!');
     
     var index = clients.push(socket.id) - 1
-      , userName
+      , username
       , userColor;
     
     if(history.length) {
       socket.emit('message', {type: 'history', data: history});
     }
     
+    //Message is ONLY for sending us a chat message
     socket.on('message', function (data) {
-      if (!(userName)) {
-      //This is the first time we've seen them
-        userName = htmlEntities(data);
-        //It'll give us an error when we run out of colors
-        userColor = colors.shift();
-        socket.emit('message', { type: 'color', data: userColor });
-        console.log((new Date()) + ' User is known as: "' + userName + '" with ' + userColor + ' color.');
-      } else { 
-        console.log((new Date()) + ' Received Message from ' + userName + ': ' + data);
-              
-        var obj = {
-          time: (new Date()).getTime(),
-          text: htmlEntities(data),
-          author: userName,
-          color: userColor
-        };
-        history.push(obj);
-        history = history.slice(-100);
+      console.log((new Date()) + ' Received Message from ' + username + ': ' + data);
+            
+      var obj = {
+        time: (new Date()).getTime(),
+        text: htmlEntities(data),
+        author: username,
+        color: userColor
+      };
+      history.push(obj);
+      history = history.slice(-100);
 
-        socket.emit('message', {type: 'message', data: obj});
-        socket.broadcast.emit('message', {type: 'message', data: obj});
-      }
+      socket.emit('message', {type: 'message', data: obj});
+      socket.broadcast.emit('message', {type: 'message', data: obj});
+    });
+    
+    //When the user choses a username
+    socket.on('login', function(data) {
+      username = htmlEntities(data.username);
+      //FIXME: It'll give us undefined when we run out of colors (7)
+      userColor = colors.shift();
+      socket.emit('newUser', { color: userColor });
+      console.log((new Date()) + ' User is known as: "' + username + '" with ' + userColor + ' color.');
     });
     
     socket.on('disconnect', function(data) {
-      if (userName && userColor) {
+      if (username && userColor) {
         console.log((new Date()) + " Peer " + socket.id + " disconnected.");
         clients.splice(index, 1);
         colors.push(userColor);
