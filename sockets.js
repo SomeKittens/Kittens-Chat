@@ -26,8 +26,6 @@ exports.start = function(server) {
     
     if(history.length) {
       socket.emit('message', {type: 'history', data: history});
-    } else {
-      socket.emit('message', {});
     }
     
     socket.on('message', function (data) {
