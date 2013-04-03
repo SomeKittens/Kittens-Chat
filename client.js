@@ -5,7 +5,10 @@ $(function () {
     , input = $('#input')
     , status = $('#status')
     , myColor = false
-    , myName = false;
+    , myName = false
+    , addMessage = function(author, message, color, dt) {
+      content.append('<p><span style="color:' + color + '">' + author + '</span> @ ' + (dt.getHours() < 10 ? '0' + dt.getHours() : dt.getHours()) + ':' + (dt.getMinutes() < 10 ? '0' + dt.getMinutes() : dt.getMinutes()) + ': ' + message + '</p>');
+    };
 
   var connection = io.connect('http://kittens-chat.herokuapp.com/');
   
@@ -54,16 +57,8 @@ $(function () {
     }
   });
   
-  //TODO: Make this Socket.io friendly.
-  /*
-  setInterval(function () {
-    if (connection.readyState !== 1) {
-      status.text('Error');
-      input.attr('disabled', 'disabled').val('Unable to comminucate with the WebSocket server.');
-    }
-  }, 3000);
-  */
-  function addMessage(author, message, color, dt) {
-    content.append('<p><span style="color:' + color + '">' + author + '</span> @ ' + (dt.getHours() < 10 ? '0' + dt.getHours() : dt.getHours()) + ':' + (dt.getMinutes() < 10 ? '0' + dt.getMinutes() : dt.getMinutes()) + ': ' + message + '</p>');
-  }
+  connection.on('connect_failed', function() {
+    status.text('Error');
+    input.attr('disabled', 'disabled').val('Unable to comminucate with the WebSocket server.');
+  });
 });

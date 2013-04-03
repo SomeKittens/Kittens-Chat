@@ -38,7 +38,7 @@ exports.start = function(server) {
       if (!(userName)) {
       //This is the first time we've seen them
         userName = htmlEntities(data);
-        //It'll give us an error when we run out of colors
+        //FIXME: It'll give us undefined when we run out of colors (7)
         userColor = colors.shift();
         socket.emit('message', { type: 'color', data: userColor });
         console.log((new Date()) + ' User is known as: "' + userName + '" with ' + userColor + ' color.');
