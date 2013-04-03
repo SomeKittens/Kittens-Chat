@@ -10,7 +10,6 @@ $(function () {
   var connection = io.connect('http://kittens-chat.herokuapp.com/');
   
   connection.on('connect', function () {
-    console.log('connecting');
     input.removeAttr('disabled');
     status.text('Choose name:');
   });
@@ -60,7 +59,7 @@ $(function () {
   setInterval(function () {
     if (connection.readyState !== 1) {
       status.text('Error');
-      input.attr('disabled', 'disabled').val('Unable to comminucate ' + 'with the WebSocket server.');
+      input.attr('disabled', 'disabled').val('Unable to comminucate with the WebSocket server.');
     }
   }, 3000);
   */

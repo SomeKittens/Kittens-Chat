@@ -21,7 +21,7 @@ exports.start = function(server) {
   io.configure(function() {
     io.set('transports', ['xhr-polling']);
     io.set('polling duration', 10);
-  });  
+  });
 
   io.sockets.on('connection', function (socket) {
     console.log('New friend connected!');

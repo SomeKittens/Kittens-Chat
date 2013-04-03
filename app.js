@@ -23,13 +23,10 @@ app.configure(function(){
 });
 
 app.get('/', function (req, res) {
-  console.log(typeof req.headers.host);
   res.sendfile(__dirname + '/index.html');
 });
 
 app.get('/client.js', function(req, res) {
-  console.log(req.headers.host);
-  console.log(req.headers.host.indexOf('localhost'));
   //Fix for local testing
   if(req.headers.host.indexOf('localhost') === -1) {
     res.sendfile(__dirname + '/client.js');
