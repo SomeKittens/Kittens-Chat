@@ -26,6 +26,8 @@ exports.start = function(server) {
     
     if(history.length) {
       socket.emit('message', {type: 'history', data: history});
+    } else {
+      socket.emit('message', {});
     }
     
     socket.on('message', function (data) {
@@ -33,6 +35,7 @@ exports.start = function(server) {
       if (!(userName)) {
       //This is the first time we've seen them
         userName = htmlEntities(data);
+        //It'll give us an error when we run out of colors
         userColor = colors.shift();
         socket.emit('message', { type: 'color', data: userColor });
         console.log((new Date()) + ' User is known as: "' + userName + '" with ' + userColor + ' color.');
@@ -55,7 +58,7 @@ exports.start = function(server) {
     
     socket.on('disconnect', function(data) {
       if (userName && userColor) {
-        console.log((new Date()) + " Peer " + connection.remoteAddress + " disconnected.");
+        console.log((new Date()) + " Peer " + socket.id + " disconnected.");
         clients.splice(index, 1);
         colors.push(userColor);
       }
