@@ -7,7 +7,7 @@ $(function () {
     , myColor = false
     , myName = false;
 
-  var connection = io.connect('http://kittens-chat.herokuapp.com/');
+  var connection = io.connect('http://localhost/');
   
   connection.on('connect', function () {
     console.log('connecting');
@@ -15,7 +15,6 @@ $(function () {
     status.text('Choose name:');
   });
   
-  //TODO: Error isn't implemented server-side (but still is called somehow)
   connection.on('error', function (error) {
     content.html($('<p>', {
       text: 'Sorry, but there\'s some problem with your connection or the server is down.'
