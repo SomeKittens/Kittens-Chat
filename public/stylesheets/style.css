@@ -1,24 +1,38 @@
 html, body {
-    height:100%;
+    margin:0;
+    padding:0;
+}
+#header {
+    position:absolute;
+    top:0;
+    height:100px;
+    width:inherit;
 }
 #wrap {
-    min-height:100%;
-    height:auto;
-    margin:0 auto -102px;
+  min-height:100%;
+  height:auto;
+  margin:0 auto -102px;
 }
 #footer {
-    height:102px;
-    background-color:#f5f5f5;
+  background-color:#f5f5f5;
+  position:absolute;
+  bottom:0;
+  height:100px;
+  width:100%;
 }
 #input { 
-    height: 76px;
-    margin-top: 4px;
-    width: 470px;
+  height: 76px;
+  margin-top: 4px;
+  width: 470px;
 }
 #send {
-    vertical-align: top;
-    margin-top: 8px;
+  vertical-align: top;
+  margin-top: 8px;
 }
 #content {
-  margin-bottom: 120px;
+    position:absolute;
+    top:100px;
+    bottom:100px;
+    width:inherit;
+    overflow:auto;
 }

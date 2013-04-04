@@ -9,7 +9,8 @@
   <body>
     <div id="wrap">
     <!-- Begin page content -->
-    <div class="container ">
+    <div class="container">
+      <div id="header">
         <div class="page-header clearfix">
             <h3 class="pull-left">Room Title</h3>
             <ul class="nav nav-pills pull-right">
@@ -23,13 +24,15 @@
                 </li>
             </ul>
         </div>
+      </div>
+        <!-- Not needed at this point
         <div class="page-header" id="page-info">
             <button type="button" class="close" title="Hide Information">×</button>
             <p class="lead">Welcome to the room! All conversations are private and nothing is saved when the room is destroyed. Talk about anything.</p>
             <p>See <a href="#">Privacy Policy</a> for more information.</p>
         </div>
+        -->
         <div id="content"></div>
-    </div>
     </div>
     <div id="footer">
         <div class="container">
@@ -37,7 +40,7 @@
             <textarea id="input"></textarea>
         </div>
     </div>
- 
+    </div>
     <!-- Modal -->
     <div id="selectNameModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-header">
