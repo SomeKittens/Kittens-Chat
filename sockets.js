@@ -7,37 +7,37 @@ var history = []
     return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;')
                       .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
-  //TODO: Change color to randomly-generated Hex
-  , colors = [ 'red', 'green', 'blue', 'magenta', 'purple', 'plum', 'orange' ];  
+  , colors = ['maroon', 'red', 'orange', 'yellow', 'olive', 'purple', 'fuchsia', 'white', 'lime', 'green', 'navy', 'blue', 'aqua', 'teal', 'black', 'silver', 'gray'];  
   
 //Randomize colors
 colors.sort(function() { return Math.random() > 0.5; } );
 
 exports.start = function(server) {
-  var io = require('socket.io').listen(server);
+  var io = require('socket.io').listen(server)
+    , username
+    , userColor;
   
-  //Heroku "doesn't support" Websockets yet
+  //Heroku "doesn't support" Websockets yet, so we need to tell socket.io to use long polling
   //https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku
   io.configure(function() {
     io.set('transports', ['xhr-polling']);
     io.set('polling duration', 10);
+    io.set('log level', 2);
   });
 
   io.sockets.on('connection', function (socket) {
     console.log('New friend connected!');
     
-    var index = clients.push(socket.id) - 1
-      , username
-      , userColor;
+    var index = clients.push(socket.id) - 1;
     
     if(history.length) {
-      socket.emit('message', {type: 'history', data: history});
+      socket.emit('history', history);
     }
     
     //Message is ONLY for sending us a chat message
     socket.on('message', function (data) {
       console.log((new Date()) + ' Received Message from ' + username + ': ' + data);
-            
+
       var obj = {
         time: (new Date()).getTime(),
         text: htmlEntities(data),
@@ -54,7 +54,7 @@ exports.start = function(server) {
     //When the user choses a username
     socket.on('login', function(data) {
       username = htmlEntities(data.username);
-      //FIXME: It'll give us undefined when we run out of colors (7)
+      //FIXME: It'll give us undefined when we run out of colors (17)
       userColor = colors.shift();
       socket.emit('newUser', { color: userColor });
       console.log((new Date()) + ' User is known as: "' + username + '" with ' + userColor + ' color.');

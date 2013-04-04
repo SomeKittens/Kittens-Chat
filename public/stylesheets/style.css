@@ -19,3 +19,6 @@ html, body {
     vertical-align: top;
     margin-top: 8px;
 }
+#content {
+  margin-bottom: 120px;
+}

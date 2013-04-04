@@ -10,8 +10,6 @@ $(function () {
       content.append('<p><span style="color:' + color + '">' + author + '</span> @ ' + (dt.getHours() < 10 ? '0' + dt.getHours() : dt.getHours()) + ':' + (dt.getMinutes() < 10 ? '0' + dt.getMinutes() : dt.getMinutes()) + ': ' + message + '</p>');
     };
     
-  //When the user picks a username, emit a login event
-
   var connection = io.connect(window.location.protocol + "//" + window.location.host);
   
   connection.on('connect', function () {
@@ -26,17 +24,17 @@ $(function () {
   });
   
   connection.on('message', function (message) {
-    console.log(message);
-    //TODO: Make this whole system make sense with custom events
-    if (message.type === 'history') { 
-      for (var i = 0; i < message.data.length; i++) {
-        addMessage(message.data[i].author, message.data[i].text, message.data[i].color, new Date(message.data[i].time));
-      }
-    } else if (message.type === 'message') { 
+    if (message.type === 'message') { 
       input.removeAttr('disabled'); 
       addMessage(message.data.author, message.data.text, message.data.color, new Date(message.data.time));
     } else {
       console.log('Hmm..., I\'ve never seen JSON like this: ', message);
+    }
+  });
+  
+  connection.on('history', function(history) {
+    for (var i = 0,k=history.length; i < k; i++) {
+      addMessage(history[i].author, history[i].text, history[i].color, new Date(history[i].time));
     }
   });
   
