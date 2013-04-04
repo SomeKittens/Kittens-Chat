@@ -13,9 +13,7 @@ var history = []
 colors.sort(function() { return Math.random() > 0.5; } );
 
 exports.start = function(server) {
-  var io = require('socket.io').listen(server)
-    , username
-    , userColor;
+  var io = require('socket.io').listen(server);
   
   //Heroku "doesn't support" Websockets yet, so we need to tell socket.io to use long polling
   //https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku
@@ -28,7 +26,9 @@ exports.start = function(server) {
   io.sockets.on('connection', function (socket) {
     console.log('New friend connected!');
     
-    var index = clients.push(socket.id) - 1;
+    var index = clients.push(socket.id) - 1
+      , username
+      , userColor;
     
     if(history.length) {
       socket.emit('history', history);
@@ -37,7 +37,7 @@ exports.start = function(server) {
     //Message is ONLY for sending us a chat message
     socket.on('message', function (data) {
       console.log((new Date()) + ' Received Message from ' + username + ': ' + data);
-
+      
       var obj = {
         time: (new Date()).getTime(),
         text: htmlEntities(data),
