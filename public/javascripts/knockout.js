@@ -5,14 +5,7 @@
     var self = this;
     
     // daytums
-    self.history = ko.observableArray([
-      {
-        author: 'somekittens',
-        color: 'blue',
-        time: new Date(),
-        text: 'Hello world'
-      }
-    ]);
+    self.history = ko.observableArray([]);
     self.user = ko.observable({
       name: 'Connecting...',
       color: undefined,
@@ -23,7 +16,7 @@
       //Broke this into several variables instead of one giant one
       var hours = dt.getHours() < 10 ? '0' + dt.getHours() : dt.getHours()
         , minutes = dt.getMinutes() < 10 ? '0' + dt.getMinutes() : dt.getMinutes();
-      return ' @ ' + hours + ':' + minutes; 
+      return ' @ ' + hours + ':' + minutes + ' : '; 
     }
   };
 

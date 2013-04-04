@@ -51,7 +51,10 @@
   });
   
   //Set up our Bootstrap stuff
-  nameModal.modal('show');
+  nameModal.modal({
+    show: true,
+    backdrop: 'static'
+  });
   nameModal.on('hide', function() {
     vm.user().name = $('#username_select').val();
     connection.emit('login', {username: vm.user().name});
