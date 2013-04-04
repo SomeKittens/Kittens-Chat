@@ -25,18 +25,24 @@
             </ul>
         </div>
       </div>
-        <!-- Not needed at this point
+        <!-- Not needed at this point, will add to "about" in the future TODO
         <div class="page-header" id="page-info">
             <button type="button" class="close" title="Hide Information">×</button>
             <p class="lead">Welcome to the room! All conversations are private and nothing is saved when the room is destroyed. Talk about anything.</p>
             <p>See <a href="#">Privacy Policy</a> for more information.</p>
         </div>
         -->
-        <div id="content"></div>
+        <div id="content" data-bind="foreach: history">
+        <p>
+          <span data-bind="text: author, style: {'color': color}"></span>
+          <span data-bind="text: $root.timestamp(time)"></span>
+          <span data-bind="text: text"></span>
+        </p>
+        </div>
     </div>
     <div id="footer">
         <div class="container">
-            <span id="status">Connecting...</span>
+            <span id="status", data-bind="text: user().name">Connecting...</span>
             <textarea id="input"></textarea>
         </div>
     </div>
@@ -55,7 +61,9 @@
     </div>
   </body>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script src="/javascripts/bootstrap.min.js"></script>
+  <script src="/javascripts/lib/bootstrap.min.js"></script>
+  <script src="/javascripts/lib/knockout-2.2.1.js"></script>
   <script src="/socket.io/socket.io.js"></script>
-  <script src="/javascripts/client.js"></script>
+  <script src="/javascripts/knockout.js"></script>
+  <script src="/javascripts/socket.client.js"></script>
 </html>

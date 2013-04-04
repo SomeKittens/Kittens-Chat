@@ -47,8 +47,8 @@ exports.start = function(server) {
       history.push(obj);
       history = history.slice(-100);
 
-      socket.emit('message', {type: 'message', data: obj});
-      socket.broadcast.emit('message', {type: 'message', data: obj});
+      socket.emit('message', obj);
+      socket.broadcast.emit('message', obj);
     });
     
     //When the user choses a username
