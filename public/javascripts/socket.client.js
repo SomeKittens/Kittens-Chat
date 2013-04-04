@@ -13,9 +13,12 @@
   });
   
   connection.on('error', function (error) {
-    content.html($('<p>', {
-      text: 'Sorry, but there\'s some problem with your connection or the server is down.'
-    }));
+    vm.history.push({
+      author: 'System',
+      text: 'Sorry, but there\'s some problem with your connection or the server is down.',
+      color: 'black'
+      time: new Date()
+    });
   });
   
   connection.on('message', function (message) {
