@@ -73,6 +73,13 @@
     $input.attr('disabled', 'disabled').val('Unable to comminucate with the WebSocket server.  Try refreshing the page.');
   });
   
+  
+  //When the server restarts, it loses our names.
+  //So, on reconnect, double check that it still knows us
+  connection.on('reconnect', function() {
+    
+  });
+  
   //Set up our Bootstrap stuff
   
   //Make things easier for our users who like keyboards
@@ -92,7 +99,7 @@
       $nameModal.modal('hide');
     }
   });
-
+  
   $nameModal.modal({
     show: true,
     

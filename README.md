@@ -28,8 +28,8 @@ One of the nice things about Socket.io is that it allows one to define custom ev
 
 ### TODO:
  - Multiple rooms
- - Oneboxing of gifs, etc
  - Store history in MongoDB
  - Various Forks-Teaching, troll chat, micro chat
  - System message of the day
- - Format all messages to be in the right order (They currently work, just bring them up to standard)
+ - Format all `message`s in the code to be in the right order (They currently work, just bring them up to standard)
+ - Refactor user names/colors.  There should be a central store either on client or server.
