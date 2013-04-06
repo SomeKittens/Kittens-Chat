@@ -26,10 +26,15 @@
   //Scroll to the bottom of the chat window when a new message arrives
   vm.history.subscribe(function() {
     var content = $('#content');
-    //FIXME: doesn't always trigger 
-    content.animate({
-        scrollTop: content[0].scrollHeight
-      }, 400);
+    
+    //Only animate if the user is already at the bottom
+    if(content.scrollTop() + content.innerHeight() >= content[0].scrollHeight) {
+    
+      //FIXME: doesn't always trigger 
+      content.animate({
+          scrollTop: content[0].scrollHeight
+        }, 400);
+    }
   });
   
   ko.applyBindings(vm);
