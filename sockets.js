@@ -42,10 +42,6 @@ exports.start = function(server) {
     var username
       , userColor;
     
-    if(history.length) {
-      socket.emit('history', history);
-    }
-    
     //Message is ONLY for sending us a chat message
     socket.on('message', function (data) {
       console.log((new Date()) + ' Received Message from ' + username + ': ' + data);
@@ -56,7 +52,7 @@ exports.start = function(server) {
       var urlpattern = /\bhttps?:\/\/[^\s<>"`{}|\^\[\]\\]+/g
       
         //jpeg doesn't have a period so they're all four chars long, simplifying the substring call later
-        , imgExts = ['.png', '.jpg', 'jpeg', '.gif'];
+        , imgExts = ['.png', '.jpg', 'jpeg', '.gif', '.ico'];
       data = data.replace(urlpattern, function(url) {
         
         //Unescape ampersands in the URL
@@ -95,9 +91,29 @@ exports.start = function(server) {
       socket.emit('loginAck', { color: userColor });
       console.log((new Date()) + ' User is known as: "' + username + '" with ' + userColor + ' color.');
       
+      if(history.length) {
+        socket.emit('history', history);
+      }
+      
       //Tell everyone this guy logged in
       //We're escaping here because messages are rendered as HTML
       io.sockets.emit('announce', 'Welcome <span style="color: ' + userColor +'">' + username.escape() + '</span> to the chatroom');
+    });
+    
+    //Client sends this on reconnect.  If there's been a server reboot, we've forgotten them
+    socket.on('remind', function(data) {
+      if(!(username)) {
+        
+        //Oh noes!  Tell us your secrets!
+        username = data.username;
+        userColor = data.color;
+        
+        //Pull their color from the free colors
+        var coloridx = colors.indexOf(userColor);
+        if(coloridx) {
+          colors.splice(coloridx, 1);
+        }
+      }
     });
     
     //Log the disconnect and free up their color

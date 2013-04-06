@@ -77,7 +77,7 @@
   //When the server restarts, it loses our names.
   //So, on reconnect, double check that it still knows us
   connection.on('reconnect', function() {
-    
+    connection.emit('remind', {username: vm.username(), color: vm.usercolor()});
   });
   
   //Set up our Bootstrap stuff

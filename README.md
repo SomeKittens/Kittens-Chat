@@ -19,6 +19,7 @@ One of the nice things about Socket.io is that it allows one to define custom ev
 ## Emitted by client
  - `login` - Sends the desired username to the server
  - `message` - Sends a message that the user just typed in to the server
+ - `remind` - Quick fix for when the server loses all usernames on restart.  `remind` reminds the server of the user's name/color.
 
 \* A message is an object with four properties:
  - `author`: Username of person who sent the message
