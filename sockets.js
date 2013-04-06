@@ -13,7 +13,7 @@ String.prototype.escape = function() {
 };
 
 var history = []
-  , colors = ['maroon', 'red', 'orange', 'yellow', 'olive', 'purple', 'fuchsia', 'white', 'lime', 'green', 'navy', 'blue', 'aqua', 'teal', 'silver', 'gray'];  
+  , colors = ['maroon', 'red', 'orange', 'yellow', 'olive', 'purple', 'fuchsia', 'lime', 'green', 'navy', 'blue', 'aqua', 'teal', 'silver', 'gray'];  
   
 //Randomize colors
 colors.sort(function() { return Math.random() > 0.5; } );
@@ -89,14 +89,14 @@ exports.start = function(server) {
     //When the user choses a username
     //TODO: Check if the name's taken and respond with an error
     socket.on('login', function(data) {
-      username = data.username;
+      username = data.username.escape();
       //FIXME: It'll give us undefined when we run out of colors (16)
       userColor = colors.shift();
       socket.emit('loginAck', { color: userColor });
       console.log((new Date()) + ' User is known as: "' + username + '" with ' + userColor + ' color.');
       
       //Tell everyone this guy logged in
-      io.sockets.emit('announce', 'Welcome ' + username + ' to the chatroom');
+      io.sockets.emit('announce', 'Welcome <span style="color: ' + userColor +'">' + username + '</span> to the chatroom');
     });
     
     //Log the disconnect and free up their color

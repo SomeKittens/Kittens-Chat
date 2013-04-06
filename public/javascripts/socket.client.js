@@ -56,7 +56,7 @@
     $input.removeAttr('disabled').focus();
   });
   
-    //Someone has logged in, let's welcome them
+  //Someone has logged in, let's welcome them
   connection.on('announce', function(message) {
     vm.history.push({
       author: 'System',
