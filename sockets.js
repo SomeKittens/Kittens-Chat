@@ -33,6 +33,8 @@ exports.start = function(server) {
   io.configure(function() {
     io.set('transports', ['xhr-polling']);
     io.set('polling duration', 10);
+    
+    //Makes it easier to see the important messages
     io.set('log level', 2);
   });
 
@@ -60,9 +62,8 @@ exports.start = function(server) {
       //Add this message to history
       history.push(obj);
 
-      //Send them the message and then send everyone else the message
-      socket.emit('message', obj);
-      socket.broadcast.emit('message', obj);
+      //Send the message to all connected sockets
+      io.sockets.emit('message', obj);
     });
     
     //When the user choses a username
@@ -73,6 +74,8 @@ exports.start = function(server) {
       userColor = colors.shift();
       socket.emit('loginAck', { color: userColor });
       console.log((new Date()) + ' User is known as: "' + username + '" with ' + userColor + ' color.');
+      
+      //Tell everyone this guy logged in
       io.sockets.emit('announce', 'Welcome ' + username + ' to the chatroom');
     });
     

@@ -35,8 +35,9 @@
   });
   
   //Load up the chat window with all the messages the user has missed
-  //TODO: Determine if we need the for loop.  I think it may be possible to just assign vm.history to what the server gives us
   connection.on('history', function(history) {
+    
+    //We have to manually iterate over history because Socket.io is converting our Date object to a string
     for (var i = 0,k=history.length; i < k; i++) {
       vm.history.push({
         author: history[i].author, 
