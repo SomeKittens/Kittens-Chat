@@ -73,6 +73,7 @@ exports.start = function(server) {
       userColor = colors.shift();
       socket.emit('loginAck', { color: userColor });
       console.log((new Date()) + ' User is known as: "' + username + '" with ' + userColor + ' color.');
+      io.sockets.emit('announce', 'Welcome ' + username + ' to the chatroom');
     });
     
     //Log the disconnect and free up their color

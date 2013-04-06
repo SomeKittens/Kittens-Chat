@@ -14,6 +14,7 @@ One of the nice things about Socket.io is that it allows one to define custom ev
  - `history` - Sends an object containing every message recorded (These are still lost in the event of a server restart)
  - `message` - Sends data* about a singular message
  - `loginAck` - Acknowledges a client's login, assigns them a color
+ - `announce` - When someone logs in, their username is broadcasted out to welcome them
  
 ## Emitted by client
  - `login` - Sends the desired username to the server
@@ -31,3 +32,5 @@ One of the nice things about Socket.io is that it allows one to define custom ev
  - Store history in MongoDB
  - Various Forks-Teaching, troll chat, micro chat
  - System message of the day
+ - Announce when someone logs on
+ - Format all messages to be in the right order (They currently work, just bring them up to standard)

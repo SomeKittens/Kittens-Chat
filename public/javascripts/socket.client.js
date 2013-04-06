@@ -57,6 +57,16 @@
     $input.removeAttr('disabled').focus();
   });
   
+    //Someone has logged in, let's welcome them
+  connection.on('announce', function(message) {
+    vm.history.push({
+      author: 'System',
+      color: 'black',
+      text: message,
+      time: new Date()
+    });
+  });
+  
   //Failed connection?  Let's let our user know about it
   //TODO: Move to bootstrap alert
   connection.on('connect_failed', function() {
