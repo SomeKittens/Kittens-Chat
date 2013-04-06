@@ -7,11 +7,9 @@
     //daytums
     self.history = ko.observableArray([]);
     
-    //We set the inital name to 'Connecting...' because management told us it conformed with ISO9001
-    self.user = ko.observable({
-      name: 'Connecting...',
-      color: undefined,
-    });
+    //We set the inital name to 'Connecting...' because management told us it conformed with ISO9001 standards
+    self.username = ko.observable('Connecting...');
+    self.usercolor = ko.observable();
     
     //Number-crunching things
     self.timestamp = function(dt) {

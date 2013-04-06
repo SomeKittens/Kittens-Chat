@@ -37,13 +37,13 @@
         <p>
           <span data-bind="text: author, style: {'color': color}"></span>
           <span data-bind="text: $root.timestamp(time)"></span>
-          <span data-bind="text: text"></span>
+          <span data-bind="html: text"></span>
         </p>
         </div>
     </div>
     <div id="footer">
         <div class="container">
-            <span id="status", data-bind="text: user().name, style: {'color': user().color}">Connecting...</span>
+            <span id="status", data-bind="text: username, style: {'color': usercolor}"></span> :
             <textarea id="input" disabled></textarea>
         </div>
     </div>

@@ -52,10 +52,7 @@
   //Server acknowledged our login request, we're good to go!
   //Set the username and color and give us the ability to send messages
   connection.on('loginAck', function(message) {
-    vm.user().color = message.color;
-    
-    //TODO: this line may not be needed thanks to Knockout
-    $status.text(vm.user().name + ': ').css('color', vm.user().color);
+    vm.usercolor(message.color);
     $input.removeAttr('disabled').focus();
   });
   
@@ -85,8 +82,8 @@
   
   //The hide is triggered when the user clicks "start chatting!"
   $nameModal.on('hide', function() {
-    vm.user().name = $usernameSelect.val();
-    connection.emit('login', {username: vm.user().name});
+    vm.username($usernameSelect.val());
+    connection.emit('login', {username: vm.username()});
   });
   
   //User can press enter instead of clicking the button

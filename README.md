@@ -32,5 +32,4 @@ One of the nice things about Socket.io is that it allows one to define custom ev
  - Store history in MongoDB
  - Various Forks-Teaching, troll chat, micro chat
  - System message of the day
- - Announce when someone logs on
  - Format all messages to be in the right order (They currently work, just bring them up to standard)
