@@ -15,7 +15,7 @@
   */
 
 var history = []
-  , colors = ['maroon', 'red', 'orange', 'yellow', 'olive', 'purple', 'fuchsia', 'white', 'lime', 'green', 'navy', 'blue', 'aqua', 'teal', 'black', 'silver', 'gray'];  
+  , colors = ['maroon', 'red', 'orange', 'yellow', 'olive', 'purple', 'fuchsia', 'white', 'lime', 'green', 'navy', 'blue', 'aqua', 'teal', 'silver', 'gray'];  
   
 //Randomize colors
 colors.sort(function() { return Math.random() > 0.5; } );
@@ -70,7 +70,7 @@ exports.start = function(server) {
     //TODO: Check if the name's taken and respond with an error
     socket.on('login', function(data) {
       username = data.username;
-      //FIXME: It'll give us undefined when we run out of colors (17)
+      //FIXME: It'll give us undefined when we run out of colors (16)
       userColor = colors.shift();
       socket.emit('loginAck', { color: userColor });
       console.log((new Date()) + ' User is known as: "' + username + '" with ' + userColor + ' color.');
