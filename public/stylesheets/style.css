@@ -3,10 +3,10 @@ html, body {
     padding:0;
 }
 #header {
-    position:absolute;
-    top:0;
-    height:100px;
-    width:inherit;
+  position:absolute;
+  top:0;
+  height:100px;
+  width:inherit;
 }
 #wrap {
   min-height:100%;
@@ -30,9 +30,13 @@ html, body {
   margin-top: 8px;
 }
 #content {
-    position:absolute;
-    top:100px;
-    bottom:100px;
-    width:inherit;
-    overflow:auto;
+  position:absolute;
+  top:100px;
+  bottom:100px;
+  width:inherit;
+  overflow:auto;
+}
+img {
+  max-height: 500px;
+  max-width: 75%
 }

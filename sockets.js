@@ -1,18 +1,16 @@
 'use strict';
 
-/* Not needed until we enable oneboxing and links, at that point we'll switch Knockout to `html` instead of `text`
-  // http://stackoverflow.com/a/13538245/1216976
-  String.prototype.escape = function() {
-    var tagsToReplace = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;'
-    };
-    return this.replace(/[&<>]/g, function(tag) {
-        return tagsToReplace[tag] || tag;
-    });
+// http://stackoverflow.com/a/13538245/1216976
+String.prototype.escape = function() {
+  var tagsToReplace = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;'
   };
-  */
+  return this.replace(/[&<>]/g, function(tag) {
+      return tagsToReplace[tag] || tag;
+  });
+};
 
 var history = []
   , colors = ['maroon', 'red', 'orange', 'yellow', 'olive', 'purple', 'fuchsia', 'white', 'lime', 'green', 'navy', 'blue', 'aqua', 'teal', 'silver', 'gray'];  
@@ -51,6 +49,28 @@ exports.start = function(server) {
     //Message is ONLY for sending us a chat message
     socket.on('message', function (data) {
       console.log((new Date()) + ' Received Message from ' + username + ': ' + data);
+      
+      data = data.escape();
+      
+      //Detect URLs
+      var urlpattern = /\bhttps?:\/\/[^\s<>"`{}|\^\[\]\\]+/g
+      
+        //jpeg doesn't have a period so they're all four chars long, simplifying the substring call later
+        , imgExts = ['.png', '.jpg', 'jpeg', '.gif'];
+      data = data.replace(urlpattern, function(url) {
+        
+        //Unescape ampersands in the URL
+        var originalURL = url.replace('&amp', '&');
+        
+        //If it's a image, onebox it
+        if(imgExts.indexOf(originalURL.slice(-4)) > -1) {
+          return '<a href="' + originalURL + '" target="_blank" rel="nofollow"><img src="' + originalURL + '" alt="image sent by ' + username + '" /></a>';
+        } else {
+          
+          //Make it a regular URL
+          return '<a href="' + originalURL + '" target="_blank" rel="nofollow">' + originalURL + '</a>';
+        }
+      });
       
       var obj = {
         time: (new Date()).getTime(),
