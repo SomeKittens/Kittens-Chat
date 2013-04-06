@@ -4,8 +4,10 @@
   function chatViewModel() {
     var self = this;
     
-    // daytums
+    //daytums
     self.history = ko.observableArray([]);
+    
+    //We set the inital name to 'Connecting...' because management told us it conformed with ISO9001
     self.user = ko.observable({
       name: 'Connecting...',
       color: undefined,
@@ -13,7 +15,7 @@
     
     //Number-crunching things
     self.timestamp = function(dt) {
-      //Broke this into several variables instead of one giant one
+      //Broke this into several variables instead of one giant one for readability
       var hours = dt.getHours() < 10 ? '0' + dt.getHours() : dt.getHours()
         , minutes = dt.getMinutes() < 10 ? '0' + dt.getMinutes() : dt.getMinutes();
       return ' @ ' + hours + ':' + minutes + ' : '; 
@@ -33,4 +35,4 @@
   });
   
   ko.applyBindings(vm);
-}();
+}(this);

@@ -1,6 +1,8 @@
+'use strict';
 
 /**
- * Module dependencies.
+ * This is all boilerplate stuff for Express.  Feel free to ignore most of it.
+ * The important part is on lines 35-41
  */
 
 var express = require('express')
@@ -30,8 +32,10 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
+//We're assigning the result of http.createServer to our own variable
 var servar = http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
 
+//...and passing it to our sockets
 iosockets.start(servar);

@@ -1,17 +1,30 @@
 'use strict';
 
+/* Not needed until we enable oneboxing and links, at that point we'll switch Knockout to `html` instead of `text`
+  // http://stackoverflow.com/a/13538245/1216976
+  String.prototype.escape = function() {
+    var tagsToReplace = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;'
+    };
+    return this.replace(/[&<>]/g, function(tag) {
+        return tagsToReplace[tag] || tag;
+    });
+  };
+  */
+
 var history = []
-  , clients = []
-  // Will be replaced when we move to Knockout JS
-  , htmlEntities = function(str) {
-    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;')
-                      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-  }
   , colors = ['maroon', 'red', 'orange', 'yellow', 'olive', 'purple', 'fuchsia', 'white', 'lime', 'green', 'navy', 'blue', 'aqua', 'teal', 'black', 'silver', 'gray'];  
   
 //Randomize colors
 colors.sort(function() { return Math.random() > 0.5; } );
 
+/**
+ * Our Socket.IO server that's responsible for all this tomfoolery
+ * It manages user logins/disconnects as well as ensuring everyone gets messages that are sent
+ * @param  {HTTPServer} server A server created by the http package with http.createServer()
+ */
 exports.start = function(server) {
   var io = require('socket.io').listen(server);
   
@@ -26,8 +39,7 @@ exports.start = function(server) {
   io.sockets.on('connection', function (socket) {
     console.log('New friend connected!');
     
-    var index = clients.push(socket.id) - 1
-      , username
+    var username
       , userColor;
     
     if(history.length) {
@@ -40,30 +52,33 @@ exports.start = function(server) {
       
       var obj = {
         time: (new Date()).getTime(),
-        text: htmlEntities(data),
+        text: data,
         author: username,
         color: userColor
       };
+      
+      //Add this message to history
       history.push(obj);
-      history = history.slice(-100);
 
+      //Send them the message and then send everyone else the message
       socket.emit('message', obj);
       socket.broadcast.emit('message', obj);
     });
     
     //When the user choses a username
+    //TODO: Check if the name's taken and respond with an error
     socket.on('login', function(data) {
-      username = htmlEntities(data.username);
+      username = data.username;
       //FIXME: It'll give us undefined when we run out of colors (17)
       userColor = colors.shift();
-      socket.emit('newUser', { color: userColor });
+      socket.emit('loginAck', { color: userColor });
       console.log((new Date()) + ' User is known as: "' + username + '" with ' + userColor + ' color.');
     });
     
+    //Log the disconnect and free up their color
     socket.on('disconnect', function(data) {
       if (username && userColor) {
         console.log((new Date()) + " Peer " + socket.id + " disconnected.");
-        clients.splice(index, 1);
         colors.push(userColor);
       }
     });

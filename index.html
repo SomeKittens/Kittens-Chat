@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
   <head>
     <meta charset="utf-8">
-    <title>WebSockets - Simple chat</title>
+    <title>Kittens Chat</title>
     <link href="/stylesheets/bootstrap.min.css", rel="stylesheet", type="text/css" />
     <link href="/stylesheets/style.css", rel="stylesheet", type="text/css" />
   </head>
@@ -13,6 +13,7 @@
       <div id="header">
         <div class="page-header clearfix">
             <h3 class="pull-left">Room Title</h3>
+            <!-- Yes, I know these don't actually go anywhere -->
             <ul class="nav nav-pills pull-right">
                 <li class="active"><a href="#">Home</a>
                 </li>
@@ -43,11 +44,11 @@
     <div id="footer">
         <div class="container">
             <span id="status", data-bind="text: user().name">Connecting...</span>
-            <textarea id="input"></textarea>
+            <textarea id="input" disabled></textarea>
         </div>
     </div>
     </div>
-    <!-- Modal -->
+    <!-- Modal for the user to choose a name -->
     <div id="selectNameModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-header">
         <h3 id="myModalLabel">Choose a name</h3>
@@ -60,6 +61,7 @@
       </div>
     </div>
   </body>
+  <!-- IMPORT ALL THE LIBRARIES -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script src="/javascripts/lib/bootstrap.min.js"></script>
   <script src="/javascripts/lib/knockout-2.2.1.js"></script>
