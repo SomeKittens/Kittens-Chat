@@ -43,7 +43,7 @@
     </div>
     <div id="footer">
         <div class="container">
-            <span id="status", data-bind="text: user().name">Connecting...</span>
+            <span id="status", data-bind="text: user().name, style: {'color': user().color}">Connecting...</span>
             <textarea id="input" disabled></textarea>
         </div>
     </div>
@@ -54,7 +54,7 @@
         <h3 id="myModalLabel">Choose a name</h3>
       </div>
       <div class="modal-body">
-          <input type="text" id="username_select" class="input input-large" />
+          <input type="text" id="usernameSelect" class="input input-large" />
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Start Chatting!</button>

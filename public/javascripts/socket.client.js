@@ -4,7 +4,8 @@
   //Save us time by caching the jQuery lookups
   var $input = $('#input')
     , $status = $('#status')
-    , $nameModal = $('#selectNameModal');
+    , $nameModal = $('#selectNameModal')
+    , $usernameSelect = $('#usernameSelect');
   
   var connection = io.connect(window.location.protocol + "//" + window.location.host);
   
@@ -76,19 +77,35 @@
   });
   
   //Set up our Bootstrap stuff
-  $nameModal.modal({
-    show: true,
-    backdrop: 'static'
+  
+  //Make things easier for our users who like keyboards
+  $nameModal.on('shown', function() {
+    $usernameSelect.focus();
   });
   
   //The hide is triggered when the user clicks "start chatting!"
   $nameModal.on('hide', function() {
-    vm.user().name = $('#username_select').val();
+    vm.user().name = $usernameSelect.val();
     connection.emit('login', {username: vm.user().name});
   });
   
+  //User can press enter instead of clicking the button
+  $usernameSelect.keydown(function(e) {
+    if(e.keyCode === 13 && $usernameSelect.val().trim()) {
+      $nameModal.modal('hide');
+    }
+  });
+
+  $nameModal.modal({
+    show: true,
+    
+    //We only want this to be closed when the user has selected a name
+    backdrop: 'static',
+    keyboard: false
+  });
+  
   //Send a message if the user hits the enter key
-  $input.keydown(function (e) {
+  $input.keydown(function(e) {
     if (e.keyCode === 13) {
       e.preventDefault();
       var msg = $(this).val();
