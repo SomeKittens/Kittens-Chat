@@ -30,10 +30,16 @@
     //Only animate if the user is already at the bottom
     if(content.scrollTop() + content.innerHeight() >= content[0].scrollHeight) {
     
-      //FIXME: doesn't always trigger 
+      //FIXME: doesn't always trigger
+      //FIXME: Sometimes triggers too much (when we're adding history)
       content.animate({
           scrollTop: content[0].scrollHeight
         }, 400);
+    }
+
+    //Remove old messages, improves rendering speed on some browsers
+    if(vm.history().length >= 101) {
+      vm.history(vm.history.slice(-100));
     }
   });
   
