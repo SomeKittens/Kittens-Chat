@@ -11,15 +11,16 @@ Events
 One of the nice things about Socket.io is that it allows one to define custom events at will.  Kittens Chat uses the following events:
 
 ## Emitted by server
- - `history` - Sends an object containing every message recorded (These are still lost in the event of a server restart)
- - `message` - Sends data* about a singular message
- - `loginAck` - Acknowledges a client's login, assigns them a color
- - `announce` - When someone logs in, their username is broadcasted out to welcome them
+ - `history`: Sends an object containing every message recorded (These are still lost in the event of a server restart)
+ - `message`: Sends data* about a singular message
+ - `loginAck`: Acknowledges a client's login, assigns them a color
+ - `announce`: When someone logs in, their username is broadcasted out to welcome them
  
 ## Emitted by client
- - `login` - Sends the desired username to the server
- - `message` - Sends a message that the user just typed in to the server
- - `remind` - Quick fix for when the server loses all usernames on restart.  `remind` reminds the server of the user's name/color.
+ - `login`: Sends the desired username to the server
+ - `message`: Sends a message that the user just typed in to the server
+ - `remind`: Quick fix for when the server loses all usernames on restart.  `remind` reminds the server of the user's name/color.
+ - `roomChange`: The client wants to change to a new room
 
 \* A message is an object with four properties:
  - `author`: Username of person who sent the message

@@ -85,6 +85,17 @@
     connection.emit('remind', {username: vm.username(), color: vm.usercolor()});
   });
   
+  //Add roomchange events on clicking the room buttons
+  $('#room_a_link').click(function() {
+    connection.emit('roomChange', 'a');
+    $('#roomTitle').text('a');
+  });
+  
+  $('#room_b_link').click(function() {
+    connection.emit('roomChange', 'b');
+    $('#roomTitle').text('b');
+  });
+  
   //Set up our Bootstrap stuff
   
   //Make things easier for our users who like keyboards

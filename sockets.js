@@ -21,7 +21,7 @@ colors.sort(function() { return Math.random() > 0.5; } );
 /**
  * Our Socket.IO server that's responsible for all this tomfoolery
  * It manages user logins/disconnects as well as ensuring everyone gets messages that are sent
- * @param  {HTTPServer} server A server created by the http package with http.createServer()
+ * @param  {HTTPServer} server A server created by node's http package with http.createServer()
  */
 exports.start = function(server) {
   var io = require('socket.io').listen(server);
@@ -40,7 +40,12 @@ exports.start = function(server) {
     console.log('New friend connected!');
     
     var username
-      , userColor;
+      , userColor
+      , userRoom = 'a';
+      
+    //Default room (Empty string room is for system broadcasts)
+    //TODO: system broadcasts
+    socket.join(userRoom);
     
     //Message is ONLY for sending us a chat message
     socket.on('message', function (data) {
@@ -51,8 +56,9 @@ exports.start = function(server) {
       //Detect URLs
       var urlpattern = /\bhttps?:\/\/[^\s<>"`{}|\^\[\]\\]+/g
       
-        //jpeg doesn't have a period so they're all four chars long, simplifying the substring call later
+        //jpeg doesn't have a period so they're all four chars long, simplifying the slice call later
         , imgExts = ['.png', '.jpg', 'jpeg', '.gif', '.ico'];
+        
       data = data.replace(urlpattern, function(url) {
         
         //Unescape ampersands in the URL
@@ -78,8 +84,8 @@ exports.start = function(server) {
       //Add this message to history
       history.push(obj);
 
-      //Send the message to all connected sockets
-      io.sockets.emit('message', obj);
+      //Send the message to all connected sockets in the room
+      io.sockets.in(userRoom).emit('message', obj);
     });
     
     //When the user choses a username
@@ -98,6 +104,21 @@ exports.start = function(server) {
       //Tell everyone this guy logged in
       //We're escaping here because messages are rendered as HTML
       io.sockets.emit('announce', 'Welcome <span style="color: ' + userColor +'">' + username.escape() + '</span> to the chatroom');
+    });
+    
+    //Move our client to a new room
+    socket.on('roomChange', function(roomName) {
+      console.log('Changing user ' + username + ' to room ' + roomName);
+      socket.leave(userRoom);
+      socket.join(roomName);
+      userRoom = roomName;
+      console.log(io.sockets.manager.roomClients[socket.id]);
+      socket.emit('message', {
+        time: (new Date()).getTime(),
+        text: 'User ' + username + ' now in room ' + roomName,
+        author: 'System',
+        color: 'black'
+      });
     });
     
     //Client sends this on reconnect.  If there's been a server reboot, we've forgotten them
