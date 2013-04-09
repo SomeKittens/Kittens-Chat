@@ -16,7 +16,7 @@
       //Broke this into several variables instead of one giant one for readability
       var hours = dt.getHours() < 10 ? '0' + dt.getHours() : dt.getHours()
         , minutes = dt.getMinutes() < 10 ? '0' + dt.getMinutes() : dt.getMinutes();
-      return ' @ ' + hours + ':' + minutes + ' : '; 
+      return ' @ ' + hours + ':' + minutes; 
     }
   };
 
