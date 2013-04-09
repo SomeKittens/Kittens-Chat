@@ -1,9 +1,9 @@
 !function(){
   'use strict';
-  /* global vm: true*/
-  /* global ko: true*/
+  /* global vm: true */
+  /* global ko: true */
   
-  function chatViewModel() {
+  var ChatViewModel = function() {
     var self = this;
     
     //daytums
@@ -20,11 +20,11 @@
       var hours = dt.getHours() < 10 ? '0' + dt.getHours() : dt.getHours()
         , minutes = dt.getMinutes() < 10 ? '0' + dt.getMinutes() : dt.getMinutes();
       return ' @ ' + hours + ':' + minutes; 
-    }
+    };
   };
 
   //Attach the VM to our global object (so Socket.io can toy with it)
-  window.vm = new chatViewModel();
+  window.vm = new ChatViewModel();
   
   //Scroll to the bottom of the chat window when a new message arrives
   vm.history.subscribe(function() {

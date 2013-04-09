@@ -1,5 +1,7 @@
 !function () {
   'use strict';
+  /* global:vm true */
+  /* global:io true */
 
   //Save us time by caching the jQuery lookups
   var $input = $('#input')
@@ -18,7 +20,7 @@
   connection.on('error', function (error) {
     vm.history.push({
       author: 'System',
-      text: 'Sorry, but there\'s some problem with your connection or the server is down.',
+      text: 'Sorry, but there\'s some problem with your connection or the server is down.  Error: ' + error,
       color: 'black',
       time: new Date()
     });

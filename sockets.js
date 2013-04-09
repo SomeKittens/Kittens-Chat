@@ -117,9 +117,9 @@ exports.start = function(server) {
     });
     
     //Log the disconnect and free up their color
-    socket.on('disconnect', function(data) {
+    socket.on('disconnect', function() {
       if (username && userColor) {
-        console.log((new Date()) + " Peer " + socket.id + " disconnected.");
+        console.log((new Date()) + username + " with id " + socket.id + " disconnected.");
         colors.push(userColor);
       }
     });
