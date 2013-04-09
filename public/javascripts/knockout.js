@@ -1,11 +1,14 @@
 !function(){
   'use strict';
-
+  /* global vm: true*/
+  /* global ko: true*/
+  
   function chatViewModel() {
     var self = this;
     
     //daytums
     self.history = ko.observableArray([]);
+    self.hasFocus = true;
     
     //We set the inital name to 'Connecting...' because management told us it conformed with ISO9001 standards
     self.username = ko.observable('Connecting...');
@@ -41,7 +44,24 @@
     if(vm.history().length >= 101) {
       vm.history(vm.history.slice(-100));
     }
+    
+    //Change the tab title if the chat doesn't have focus
+    //TODO: use the room title when we move to that
+    if(!vm.hasFocus) {
+      document.title = 'New messages in Room name';
+    }
   });
   
   ko.applyBindings(vm);
+
+  //Don't know where else to put this
+  window.onfocus = function() {
+    //TODO: use the room title when we move to that
+    document.title = 'Room name';
+    vm.hasFocus = true;
+  };
+  window.onblur = function() {
+    vm.hasFocus = false;
+  };
+
 }(this);
