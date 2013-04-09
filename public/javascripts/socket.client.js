@@ -40,12 +40,10 @@
   //Load up the chat window with all the messages the user has missed
   connection.on('history', function(history) {
     var i = history.length > 100 ? 100: history.length;
-    console.log(history);
+
     //We have to manually iterate over history because Socket.io is converting our Date object to a string
     while(i--) {
-      console.log(i);
-      console.log(history[i]);
-      vm.history.push({
+      vm.history.unshift({
         author: history[i].author, 
         text: history[i].text, 
         color: history[i].color, 
