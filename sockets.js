@@ -41,7 +41,7 @@ exports.start = function(server) {
     
     var username
       , userColor
-      , userRoom = 'a';
+      , userRoom = 'General';
       
     //Default room (Empty string room is for system broadcasts)
     //TODO: system broadcasts
@@ -69,11 +69,12 @@ exports.start = function(server) {
           return '<a href="' + originalURL + '" target="_blank" rel="nofollow"><img src="' + originalURL + '" alt="image sent by ' + username + '" /></a>';
         } else {
           
-          //Make it a regular URL
+          //Otherwise, make it a regular URL
           return '<a href="' + originalURL + '" target="_blank" rel="nofollow">' + originalURL + '</a>';
         }
       });
       
+      //The chat message object
       var obj = {
         time: (new Date()).getTime(),
         text: data,
@@ -103,7 +104,7 @@ exports.start = function(server) {
       
       //Tell everyone this guy logged in
       //We're escaping here because messages are rendered as HTML
-      io.sockets.emit('announce', 'Welcome <span style="color: ' + userColor +'">' + username.escape() + '</span> to the chatroom');
+      io.sockets.in(userRoom).emit('announce', 'Welcome <span style="color: ' + userColor +'">' + username.escape() + '</span> to the chatroom');
     });
     
     //Move our client to a new room
@@ -115,10 +116,12 @@ exports.start = function(server) {
       console.log(io.sockets.manager.roomClients[socket.id]);
       socket.emit('message', {
         time: (new Date()).getTime(),
-        text: 'User ' + username + ' now in room ' + roomName,
+        text: 'You are now in room ' + roomName,
         author: 'System',
         color: 'black'
       });
+      
+      io.sockets.in(userRoom).emit('announce', 'Welcome <span style="color: ' + userColor +'">' + username.escape() + '</span> to ' + userRoom);
     });
     
     //Client sends this on reconnect.  If there's been a server reboot, we've forgotten them

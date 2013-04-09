@@ -86,14 +86,14 @@
   });
   
   //Add roomchange events on clicking the room buttons
-  $('#room_a_link').click(function() {
-    connection.emit('roomChange', 'a');
-    $('#roomTitle').text('a');
+  $('#general_chat_link').click(function() {
+    connection.emit('roomChange', 'general');
+    $('#roomTitle').text('General Chat');
   });
   
-  $('#room_b_link').click(function() {
-    connection.emit('roomChange', 'b');
-    $('#roomTitle').text('b');
+  $('#metadiscussion_link').click(function() {
+    connection.emit('roomChange', 'meta');
+    $('#roomTitle').text('Meta');
   });
   
   //Set up our Bootstrap stuff
