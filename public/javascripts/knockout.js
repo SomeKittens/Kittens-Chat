@@ -9,6 +9,7 @@
     //daytums
     self.history = ko.observableArray([]);
     self.hasFocus = true;
+    self.roomName = ko.observable('General Chat');
     
     //We set the inital name to 'Connecting...' because management told us it conformed with ISO9001 standards
     self.username = ko.observable('Connecting...');
@@ -46,9 +47,8 @@
     }
     
     //Change the tab title if the chat doesn't have focus
-    //TODO: use the room title when we move to that
     if(!vm.hasFocus) {
-      document.title = 'New messages in Room name';
+      document.title = '*New messages in ' + vm.roomName();
     }
   });
   
@@ -57,7 +57,7 @@
   //Don't know where else to put this
   window.onfocus = function() {
     //TODO: use the room title when we move to that
-    document.title = 'Room name';
+    document.title = vm.roomName();
     vm.hasFocus = true;
   };
   window.onblur = function() {

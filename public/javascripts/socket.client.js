@@ -86,12 +86,12 @@
   //Add roomchange events on clicking the room buttons
   $('#general_chat_link').click(function() {
     connection.emit('roomChange', 'general');
-    $('#roomTitle').text('General Chat');
+    vm.roomName('General Chat');
   });
   
   $('#metadiscussion_link').click(function() {
     connection.emit('roomChange', 'meta');
-    $('#roomTitle').text('Meta');
+    vm.roomName('Metadiscussion');
   });
   
   //Set up our Bootstrap stuff
