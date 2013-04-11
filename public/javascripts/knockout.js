@@ -56,8 +56,9 @@
 
   //Don't know where else to put this
   window.onfocus = function() {
-    //TODO: use the room title when we move to that
-    document.title = vm.roomName();
+    //Workaround for Chrome bug
+    //http://stackoverflow.com/a/2952386/1216976
+    window.setTimeout(function () { document.title = vm.roomName(); }, 200);
     vm.hasFocus = true;
   };
   window.onblur = function() {
