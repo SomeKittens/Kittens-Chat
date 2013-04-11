@@ -12,7 +12,7 @@ String.prototype.escape = function() {
   });
 };
 
-var history = []
+var chatHistory = []
   , colors = ['maroon', 'red', 'orange', 'olive', 'purple', 'fuchsia', 'lime', 'green', 'navy', 'blue', 'aqua', 'teal', 'silver', 'gray'];  
   
 //Randomize colors
@@ -24,7 +24,15 @@ colors.sort(function() { return Math.random() > 0.5; } );
  * @param  {HTTPServer} server A server created by node's http package with http.createServer()
  */
 exports.start = function(server) {
-  var io = require('socket.io').listen(server);
+  var io = require('socket.io').listen(server)
+  
+    //Message of the day, set statically here, will be dynamic in future versions
+    , motd = {
+      author: 'System',
+      color: 'black',
+      text: 'This here is the MOTD',
+      time: (new Date()).getTime()
+    };
   
   //Heroku "doesn't support" Websockets yet, so we need to tell socket.io to use long polling
   //https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku
@@ -82,8 +90,8 @@ exports.start = function(server) {
         color: userColor
       };
       
-      //Add this message to history
-      history.push(obj);
+      //Add this message to chatHistory
+      chatHistory.push(obj);
 
       //Send the message to all connected sockets in the room
       io.sockets.in(userRoom).emit('message', obj);
@@ -98,8 +106,12 @@ exports.start = function(server) {
       socket.emit('loginAck', { color: userColor });
       console.log((new Date()) + ' User is known as: "' + username + '" with ' + userColor + ' color.');
       
-      if(history.length) {
-        socket.emit('history', history);
+      if(motd) {
+        socket.emit('message', motd);
+      }
+      
+      if(chatHistory.length) {
+        socket.emit('history', chatHistory);
       }
       
       //Tell everyone this guy logged in
