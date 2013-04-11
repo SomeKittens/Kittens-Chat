@@ -28,10 +28,18 @@ One of the nice things about Socket.io is that it allows one to define custom ev
  - `text`: Text content of the message.  HTML will be escaped by Knockout.js
  - `time`: Date object of when the message was *recieved by the server*
 
-### TODO:
- - Multiple rooms
+### TODO for v1:
  - Store history in MongoDB
- - Various Forks-Teaching, troll chat, micro chat
- - System message of the day
+ - Dynamic system message of the day
  - Format all `message`s in the code to be in the right order (They currently work, just bring them up to standard)
  - Refactor user names/colors.  There should be a central store either on client or server.
+ - Write up documentation on installing
+ - More permenant logins (session)
+ - Create `system` event for messages sent by system (only needing to send a string)
+
+#### More TODO (if you're interested in contributing)
+ - Users can create rooms
+ - Various Forks/Branches
+   - Teaching (Lots of extra comments explaining what's going on)
+   - Troll chat (Randomly inserts extra messages, sends messages from other people, etc.)
+   - Micro chat (Something intended as a plugin, instead of a complete package.  Think of a small chat in the sidebar)
