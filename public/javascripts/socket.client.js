@@ -8,6 +8,9 @@
     , $status = $('#status')
     , $nameModal = $('#selectNameModal')
     , $usernameSelect = $('#usernameSelect');
+    
+  //General chat is the default room
+  var currentRoom = 'general';
   
   var connection = io.connect(window.location.protocol + "//" + window.location.host);
   
@@ -27,28 +30,32 @@
   });
   
   //Add the message to our chat (remember, `vm` is attached to the global object in knockout.js)
-  connection.on('message', function (message) {
+  connection.on('message', function (payload) {
+    var message = payload.data;
     $input.removeAttr('disabled');
-    vm.history.push({
-      author: message.author, 
-      text: message.text, 
-      color: message.color, 
+    vm[payload.room].push({
+      author: message.author,
+      text: message.text,
+      color: message.color,
       time: new Date(message.time)
     });
   });
   
   //Load up the chat window with all the messages the user has missed
   connection.on('history', function(history) {
-    var i = history.length > 100 ? 100: history.length;
-
-    //We have to manually iterate over history because Socket.io is converting our Date object to a string
-    while(i--) {
-      vm.history.unshift({
-        author: history[i].author, 
-        text: history[i].text, 
-        color: history[i].color, 
-        time: new Date(history[i].time)
-      });
+    for(var roomHist in history) {
+      var hist = history[roomHist]
+        , i = hist.length > 100 ? 100: hist.length;
+      
+      //We have to manually iterate over roomHist because Socket.io is converting our Date object to a string
+      while(i--) {
+        vm[roomHist].unshift({
+          author: hist[i].author, 
+          text: hist[i].text, 
+          color: hist[i].color, 
+          time: new Date(hist[i].time)
+        });
+      }
     }
   });
   
@@ -59,9 +66,16 @@
     $input.removeAttr('disabled').focus();
   });
   
-  //Someone has logged in, let's welcome them
+  //System wants to announce something important.
+  //Goes out to all rooms
   connection.on('announce', function(message) {
-    vm.history.push({
+    vm.general.push({
+      author: 'System',
+      color: 'black',
+      text: message,
+      time: new Date()
+    });
+    vm.meta.push({
       author: 'System',
       color: 'black',
       text: message,
@@ -95,6 +109,7 @@
   });
   
   //Set up our Bootstrap stuff
+  //TODO: Refactor into third file
   
   //Make things easier for our users who like keyboards
   $nameModal.on('shown', function() {
@@ -122,6 +137,19 @@
     keyboard: false
   });
   
+  //Room tabs
+  $('#generalTab').click(function(e) {
+    e.preventDefault();
+    currentRoom = 'general';
+    $(this).tab('show');
+  });
+  
+  $('#metaTab').click(function(e) {
+    e.preventDefault();
+    currentRoom = 'meta';
+    $(this).tab('show');
+  });
+  
   //Send a message if the user hits the enter key
   $input.keydown(function(e) {
     if (e.keyCode === 13) {
@@ -131,7 +159,7 @@
       if (!msg) {
         return;
       }
-      connection.emit('message', msg);
+      connection.emit('message', {room: currentRoom, data: msg});
       $input.attr('disabled', 'disabled');
     }
   });

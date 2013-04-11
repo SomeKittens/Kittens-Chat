@@ -7,7 +7,8 @@
     var self = this;
     
     //daytums
-    self.history = ko.observableArray([]);
+    self.general = ko.observableArray([]);
+    self.meta = ko.observableArray([]);
     self.hasFocus = true;
     self.roomName = ko.observable('General Chat');
     
@@ -27,13 +28,15 @@
   //Attach the VM to our global object (so Socket.io can toy with it)
   window.vm = new ChatViewModel();
   
-  //Scroll to the bottom of the chat window when a new message arrives
-  vm.history.subscribe(function() {
-    var content = $('#content');
+  //Scrolls to the bottom of the chat window when a new message arrives
+  //Also removes any messages over 100
+  var scrollToBottom = function() {
+    var content = $('#messages');
     
     //Only animate if the user is already at the bottom
     if(content.scrollTop() + content.innerHeight() >= content[0].scrollHeight) {
     
+      //TODO
       //FIXME: doesn't always trigger
       //FIXME: Sometimes triggers too much (when we're adding history)
       content.animate({
@@ -42,15 +45,21 @@
     }
 
     //Remove old messages, improves rendering speed on some browsers
-    if(vm.history().length >= 101) {
-      vm.history(vm.history.slice(-100));
+    //Checking both, TODO: refactor
+    if(vm.general().length >= 101) {
+      vm.general(vm.general.slice(-100));
+    }
+    if(vm.meta().length >= 101) {
+      vm.meta(vm.meta.slice(-100));
     }
     
     //Change the tab title if the chat doesn't have focus
     if(!vm.hasFocus) {
       document.title = '*New messages in ' + vm.roomName();
     }
-  });
+  };
+  vm.general.subscribe(scrollToBottom);
+  vm.meta.subscribe(scrollToBottom);
   
   ko.applyBindings(vm);
 

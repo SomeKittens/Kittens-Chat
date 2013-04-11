@@ -1,5 +1,13 @@
 'use strict';
 
+var chatHistory = {
+      general: [],
+      meta: []
+    }
+  , colors = ['maroon', 'red', 'orange', 'olive', 'purple', 'fuchsia', 'lime', 'green', 'navy', 'blue', 'aqua', 'teal', 'silver', 'gray'];
+  //, mongoose = require('./lib/mongoConfig');
+
+//Function to escape HTML special characters in a string
 // http://stackoverflow.com/a/13538245/1216976
 String.prototype.escape = function() {
   var tagsToReplace = {
@@ -11,9 +19,6 @@ String.prototype.escape = function() {
       return tagsToReplace[tag] || tag;
   });
 };
-
-var chatHistory = []
-  , colors = ['maroon', 'red', 'orange', 'olive', 'purple', 'fuchsia', 'lime', 'green', 'navy', 'blue', 'aqua', 'teal', 'silver', 'gray'];  
   
 //Randomize colors
 colors.sort(function() { return Math.random() > 0.5; } );
@@ -27,12 +32,7 @@ exports.start = function(server) {
   var io = require('socket.io').listen(server)
   
     //Message of the day, set statically here, will be dynamic in future versions
-    , motd = {
-      author: 'System',
-      color: 'black',
-      text: 'This here is the MOTD',
-      time: (new Date()).getTime()
-    };
+    , motd = 'This here is the MOTD';
   
   //Heroku "doesn't support" Websockets yet, so we need to tell socket.io to use long polling
   //https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku
@@ -48,21 +48,21 @@ exports.start = function(server) {
     console.log('New friend connected!');
     
     var username
-      , userColor
-      , userRoom = 'General';
+      , userColor;
+      //, userRoom = 'General';
       
     //Default room (Empty string room is for system broadcasts)
     //TODO: system broadcasts
-    socket.join(userRoom);
+    //socket.join(userRoom);
     
     //Message is ONLY for sending us a chat message
-    socket.on('message', function (data) {
-      console.log((new Date()) + ' Received Message from ' + username + ': ' + data);
+    socket.on('message', function (payload) {
+      console.log((new Date()) + ' Received Message from ' + username + ': ' + payload.data);
+
+      var data = payload.data.escape()
       
-      data = data.escape();
-      
-      //Detect URLs
-      var urlpattern = /\bhttps?:\/\/[^\s<>"`{}|\^\[\]\\]+/g
+        //Detect URLs
+        , urlpattern = /\bhttps?:\/\/[^\s<>"`{}|\^\[\]\\]+/g
       
         //jpeg doesn't have a period so they're all four chars long, simplifying the slice call later
         , imgExts = ['.png', '.jpg', 'jpeg', '.gif', '.ico'];
@@ -82,19 +82,28 @@ exports.start = function(server) {
         }
       });
       
-      //The chat message object
-      var obj = {
+      //Add message to history
+      //TODO: Not DRY
+      chatHistory[payload.room].push({
         time: (new Date()).getTime(),
         text: data,
         author: username,
         color: userColor
+      });
+      
+      //The chat message object
+      var messagePayload = {
+        room: payload.room,
+        data: {
+          time: (new Date()).getTime(),
+          text: data,
+          author: username,
+          color: userColor
+        }
       };
       
-      //Add this message to chatHistory
-      chatHistory.push(obj);
-
-      //Send the message to all connected sockets in the room
-      io.sockets.in(userRoom).emit('message', obj);
+      //Send the message to all connected sockets
+      io.sockets.emit('message', messagePayload);
     });
     
     //When the user choses a username
@@ -107,19 +116,20 @@ exports.start = function(server) {
       console.log((new Date()) + ' User is known as: "' + username + '" with ' + userColor + ' color.');
       
       if(motd) {
-        socket.emit('message', motd);
+        socket.emit('announce', motd);
       }
       
-      if(chatHistory.length) {
+      if(chatHistory.general.length || chatHistory.meta.length) {
         socket.emit('history', chatHistory);
       }
       
       //Tell everyone this guy logged in
       //We're escaping here because messages are rendered as HTML
-      io.sockets.in(userRoom).emit('announce', 'Welcome <span style="color: ' + userColor +'">' + username.escape() + '</span> to the chatroom');
+      io.sockets.emit('announce', 'Welcome <span style="color: ' + userColor +'">' + username.escape() + '</span> to the chatroom');
     });
     
     //Move our client to a new room
+    /*
     socket.on('roomChange', function(roomName) {
       console.log('Changing user ' + username + ' to room ' + roomName);
       socket.leave(userRoom);
@@ -135,8 +145,10 @@ exports.start = function(server) {
       
       io.sockets.in(userRoom).emit('announce', 'Welcome <span style="color: ' + userColor +'">' + username.escape() + '</span> to ' + userRoom);
     });
+    */
     
     //Client sends this on reconnect.  If there's been a server reboot, we've forgotten them
+    //This probably won't be needed with sessions (I hope)
     socket.on('remind', function(data) {
       if(!(username)) {
         
@@ -155,7 +167,7 @@ exports.start = function(server) {
     //Log the disconnect and free up their color
     socket.on('disconnect', function() {
       if (username && userColor) {
-        console.log((new Date()) + username + " with id " + socket.id + " disconnected.");
+        console.log((new Date()) + ' ' + username + " with id " + socket.id + " disconnected.");
         colors.push(userColor);
       }
     });

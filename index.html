@@ -13,47 +13,55 @@
       <div id="header">
         <div class="page-header clearfix">
             <h3 class="pull-left" id="roomTitle" data-bind="text: roomName"></h3>
-            <!-- Yes, I know these don't actually go anywhere
+            <!-- Yes, I know these don't actually go anywhere -->
             <ul class="nav nav-pills pull-right">
-                <li class="active"><a href="#">Home</a>
-                </li>
-                <li class="active"><a href="#">About</a>
-                </li>
-                <li class="active"><a href="#">Help</a>
-                </li>
-                <li class="active"><a href="#">Contact</a>
-                </li>
+                <li class="active"><a href="#">About</a></li>
+                <li class="active"><a href="#">Help</a></li>
+                <li class="active"><a href="https://github.com/SomeKittens/Kittens-Chat/issues" target="_blank">Contact</a></li>
             </ul>
-           -->
-           <ul class="nav nav-pills pull-right">
-            <li class="active"><a href="#" id="general_chat_link">General Chat</a>
-            </li>
-            <li class="active"><a href="#" id="metadiscussion_link">Metadiscussion of Kittens Chat</a>
-            <li>
-           </ul>
         </div>
       </div>
-        <!-- Not needed at this point, will add to "about" in the future TODO
+        <!-- Not needed at this point, will add to "about" in the future
+        TODO: Have this be a modal when people click "about"
         <div class="page-header" id="page-info">
             <button type="button" class="close" title="Hide Information">×</button>
             <p class="lead">Welcome to the room! All conversations are private and nothing is saved when the room is destroyed. Talk about anything.</p>
             <p>See <a href="#">Privacy Policy</a> for more information.</p>
         </div>
         -->
-        <div id="content" data-bind="foreach: history">
-        <p>
-          <span data-bind="text: author, style: {'color': color}"></span>
-          <span data-bind="text: $root.timestamp(time)"></span>
-          <span data-bind="html: text"></span>
-        </p>
+      <div id="content" class="tabbable">
+        <div id="blah">
+        <ul class="nav nav-tabs" data-tabs="tabs">
+          <li class="active"><a href="#general" data-toggle="tab" id="generalTab">General Chat</a></li>
+          <li><a href="#meta" data-toggle="tab" id="metaTab">Metadiscussion of Kittens Chat</a></li>
+        </ul>
         </div>
+        <div id="messages">
+          <div class="tab-content">
+            <div class="tab-pane active" id="general" data-bind="foreach: general">
+              <p>
+                <span data-bind="text: author, style: {'color': color}"></span>
+                <span data-bind="text: $root.timestamp(time)"></span>
+                <span data-bind="html: text"></span>
+              </p>
+            </div>
+            <div class="tab-pane" id="meta" data-bind="foreach: meta">
+              <p>
+                <span data-bind="text: author, style: {'color': color}"></span>
+                <span data-bind="text: $root.timestamp(time)"></span>
+                <span data-bind="html: text"></span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div id="footer">
-        <div class="container">
-            <span id="status", data-bind="text: username, style: {'color': usercolor}"></span> :
-            <textarea id="input" disabled></textarea>
-            <a href="https://github.com/SomeKittens/Kittens-Chat/issues" class="pull-right" target="_blank">Found a bug?</a>
-        </div>
+      <div class="container">
+        <span id="status", data-bind="text: username, style: {'color': usercolor}"></span> :
+        <textarea id="input" disabled></textarea>
+        <a href="https://github.com/SomeKittens/Kittens-Chat/issues" class="pull-right" target="_blank">Found a bug?</a>
+      </div>
     </div>
     </div>
     <!-- Modal for the user to choose a name -->
