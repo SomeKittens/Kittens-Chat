@@ -7,6 +7,7 @@
     var self = this;
     
     //daytums
+    //ROOMFIX
     self.general = ko.observableArray([]);
     self.meta = ko.observableArray([]);
     self.hasFocus = true;
@@ -46,6 +47,7 @@
 
     //Remove old messages, improves rendering speed on some browsers
     //Checking both, TODO: refactor
+    //ROOMFIX
     if(vm.general().length >= 101) {
       vm.general(vm.general.slice(-100));
     }

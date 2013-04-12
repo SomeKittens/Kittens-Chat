@@ -69,6 +69,7 @@
   //System wants to announce something important.
   //Goes out to all rooms
   connection.on('announce', function(message) {
+    //ROOMFIX
     vm.general.push({
       author: 'System',
       color: 'black',
@@ -98,6 +99,7 @@
   });
   
   //Add roomchange events on clicking the room buttons
+  //ROOMFIX
   $('#general_chat_link').click(function() {
     connection.emit('roomChange', 'general');
     vm.roomName('General Chat');
@@ -138,6 +140,7 @@
   });
   
   //Room tabs
+  //ROOMFIX
   $('#generalTab').click(function(e) {
     e.preventDefault();
     currentRoom = 'general';
