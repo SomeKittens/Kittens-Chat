@@ -15,20 +15,12 @@
             <h3 class="pull-left" id="roomTitle" data-bind="text: roomName"></h3>
             <!-- Yes, I know these don't actually go anywhere -->
             <ul class="nav nav-pills pull-right">
-                <li class="active"><a href="#">About</a></li>
+                <li class="active"><a href="#aboutModal" data-toggle="modal">About</a></li>
                 <li class="active"><a href="#">Help</a></li>
                 <li class="active"><a href="https://github.com/SomeKittens/Kittens-Chat/issues" target="_blank">Contact</a></li>
             </ul>
         </div>
       </div>
-        <!-- Not needed at this point, will add to "about" in the future
-        TODO: Have this be a modal when people click "about"
-        <div class="page-header" id="page-info">
-            <button type="button" class="close" title="Hide Information">×</button>
-            <p class="lead">Welcome to the room! All conversations are private and nothing is saved when the room is destroyed. Talk about anything.</p>
-            <p>See <a href="#">Privacy Policy</a> for more information.</p>
-        </div>
-        -->
       <div id="content" class="tabbable">
         <div id="blah">
         <ul class="nav nav-tabs" data-tabs="tabs">
@@ -77,6 +69,27 @@
         <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Start Chatting!</button>
       </div>
     </div>
+    <!-- "About" modal -->
+    <div id="aboutModal" class="modal hide fade" tabindex="-1" role="contentinfo" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <h3 id="myModalLabel">About Kittens Chat</h3>
+      </div>
+      <div class="modal-body">
+        <p class="lead">Welcome to the room! All conversations are private and nothing is saved when the room is destroyed. Talk about anything.</p>
+        <p>See <a href="#">Privacy Policy</a> for more information.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+      </div>
+    </div>
+    <!-- Not needed at this point, will add to "about" in the future
+        TODO: Have this be a modal when people click "about"
+        <div class="page-header" id="page-info">
+            <button type="button" class="close" title="Hide Information">×</button>
+            <p class="lead">Welcome to the room! All conversations are private and nothing is saved when the room is destroyed. Talk about anything.</p>
+            <p>See <a href="#">Privacy Policy</a> for more information.</p>
+        </div>
+        -->
   </body>
   <!-- IMPORT ALL THE LIBRARIES -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
