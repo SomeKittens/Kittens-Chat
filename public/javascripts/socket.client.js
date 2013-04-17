@@ -85,11 +85,10 @@
   });
   
   //TODO: Add roomchange events when joining/leaving
-  //We don't need to alert the server when the user changes rooms
+  //We don't need to alert the server when the user *changes* rooms
   //What we *do* need to tell the server is what room the user has sent a message to
   
   //Set up our Bootstrap stuff
-  //TODO: Refactor into third file
   
   //Make things easier for our users who like keyboards
   $nameModal.on('shown', function() {
@@ -100,8 +99,7 @@
   $nameModal.on('hide', function() {
     vm.username($usernameSelect.val());
     connection.emit('login', {username: vm.username()});
-    //FIXME When we move to user-defined rooms, this'll break.
-    document.title = 'General Chat';
+    document.title = $('#roomTabs li')[0].children[0].innerHTML;
   });
   
   //User can press enter instead of clicking the button
