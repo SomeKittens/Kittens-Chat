@@ -99,7 +99,9 @@
   $nameModal.on('hide', function() {
     vm.username($usernameSelect.val());
     connection.emit('login', {username: vm.username()});
-    document.title = $('#roomTabs li')[0].children[0].innerHTML;
+    
+    //Set the title of the page to the name of the first room
+    document.title = $('#roomTabs li:first-child :first-child').text();
   });
   
   //User can press enter instead of clicking the button
@@ -123,7 +125,7 @@
   $('#roomTabs').click(function(e) {
     vm.currentRoom(e.target.getAttribute('data-room-id'));
     console.log(e.target.innerHTML);
-    document.title = e.target.innerHTML;
+    document.title = e.target.textContent || e.target.innerText;
   });
   
   //Send a message if the user hits the enter key
