@@ -83,24 +83,21 @@ exports.start = function(server) {
         }
       });
       
-      //Add message to history
-      //TODO: Not DRY
-      chatHistory[payload.room].push({
+      var messagePackage = {
+        author: username,
+        color: userColor,
         time: (new Date()).getTime(),
         text: data,
-        author: username,
-        color: userColor
-      });
+      };
+      
+      //Add message to history
+      //TODO: Not DRY
+      chatHistory[payload.room].push(messagePackage);
       
       //The chat message object
       var messagePayload = {
         room: payload.room,
-        data: {
-          time: (new Date()).getTime(),
-          text: data,
-          author: username,
-          color: userColor
-        }
+        data: messagePackage
       };
       
       //Send the message to all connected sockets
