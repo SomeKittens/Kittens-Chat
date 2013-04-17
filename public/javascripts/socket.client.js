@@ -11,9 +11,8 @@
     
   var connection = io.connect(window.location.protocol + "//" + window.location.host);
   
-  //TODO: using `disabled` on $input is an HCI issue.  I don't think we need it, it'll be dropped soon
   connection.on('connect', function () {
-    $input.removeAttr('disabled');
+    //Do nothing!
   });
   
   //If we've got an error, fake a chat message informing the user of the error
@@ -29,7 +28,6 @@
   //Add the message to our chat (remember, `vm` is attached to the global object in knockout.js)
   connection.on('message', function (payload) {
     var message = payload.data;
-    $input.removeAttr('disabled');
     vm.rooms()[payload.room].history.push({
       author: message.author,
       text: message.text,
@@ -82,6 +80,7 @@
   //So, on reconnect, double check that it still knows us
   connection.on('reconnect', function() {
     connection.emit('remind', {username: vm.username(), color: vm.usercolor()});
+    $input.removeAttr('disabled');
   });
   
   //TODO: Add roomchange events when joining/leaving
@@ -138,7 +137,6 @@
         return;
       }
       connection.emit('message', {room: vm.currentRoom(), data: msg});
-      $input.attr('disabled', 'disabled');
     }
   });
   
