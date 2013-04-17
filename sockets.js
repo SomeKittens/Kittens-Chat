@@ -1,9 +1,7 @@
 'use strict';
 
-var chatHistory = {
-      general: [],
-      meta: []
-    }
+//Temp fix: id of the room represents the index of the room history.
+var chatHistory = []
   , colors = ['maroon', 'red', 'orange', 'olive', 'purple', 'fuchsia', 'lime', 'green', 'navy', 'blue', 'aqua', 'teal', 'silver', 'gray'];
   //, mongoose = require('./lib/mongoConfig');
 
@@ -33,6 +31,10 @@ exports.start = function(server) {
   
     //Message of the day, set statically here, will be dynamic in future versions
     , motd = 'This here is the MOTD';
+    
+    //Set up our default rooms (0 = general, 1 = meta)
+    chatHistory[0] = [];
+    chatHistory[1] = [];
   
   //Heroku "doesn't support" Websockets yet, so we need to tell socket.io to use long polling
   //https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku
@@ -49,8 +51,7 @@ exports.start = function(server) {
     
     var username
       , userColor;
-      //, userRoom = 'General';
-      
+    
     //Default room (Empty string room is for system broadcasts)
     //TODO: system broadcasts
     //socket.join(userRoom);
@@ -119,7 +120,7 @@ exports.start = function(server) {
         socket.emit('announce', motd);
       }
       
-      if(chatHistory.general.length || chatHistory.meta.length) {
+      if(chatHistory[0].length || chatHistory[1].length) {
         socket.emit('history', chatHistory);
       }
       
@@ -127,25 +128,6 @@ exports.start = function(server) {
       //We're escaping here because messages are rendered as HTML
       io.sockets.emit('announce', 'Welcome <span style="color: ' + userColor +'">' + username.escape() + '</span> to the chatroom');
     });
-    
-    //Move our client to a new room
-    /*
-    socket.on('roomChange', function(roomName) {
-      console.log('Changing user ' + username + ' to room ' + roomName);
-      socket.leave(userRoom);
-      socket.join(roomName);
-      userRoom = roomName;
-      console.log(io.sockets.manager.roomClients[socket.id]);
-      socket.emit('message', {
-        time: (new Date()).getTime(),
-        text: 'You are now in room ' + roomName,
-        author: 'System',
-        color: 'black'
-      });
-      
-      io.sockets.in(userRoom).emit('announce', 'Welcome <span style="color: ' + userColor +'">' + username.escape() + '</span> to ' + userRoom);
-    });
-    */
     
     //Client sends this on reconnect.  If there's been a server reboot, we've forgotten them
     //This probably won't be needed with sessions (I hope)

@@ -9,9 +9,6 @@
     , $nameModal = $('#selectNameModal')
     , $usernameSelect = $('#usernameSelect');
     
-  //General chat is the default room
-  var currentRoom = 'general';
-  
   var connection = io.connect(window.location.protocol + "//" + window.location.host);
   
   //TODO: using `disabled` on $input is an HCI issue.  I don't think we need it, it'll be dropped soon
@@ -33,7 +30,7 @@
   connection.on('message', function (payload) {
     var message = payload.data;
     $input.removeAttr('disabled');
-    vm[payload.room].push({
+    vm.rooms()[payload.room].history.push({
       author: message.author,
       text: message.text,
       color: message.color,
@@ -69,7 +66,9 @@
   //System wants to announce something important.
   //Goes out to all rooms
   connection.on('announce', function(message) {
-    //ROOMFIX
+    vm.broadcast(message);
+    /*
+    vm.rooms.forEach
     vm.general.push({
       author: 'System',
       color: 'black',
@@ -82,6 +81,7 @@
       text: message,
       time: new Date()
     });
+*/
   });
   
   //Failed connection?  Let's let our user know about it
@@ -99,16 +99,19 @@
   });
   
   //Add roomchange events on clicking the room buttons
-  //ROOMFIX
+  //We don't need to alert the server when the user changes rooms
+  //What we *do* need to tell the server is what room the user has sent a message to
+  /*
   $('#general_chat_link').click(function() {
     connection.emit('roomChange', 'general');
-    vm.roomName('General Chat');
+    vm.currentRoom('General Chat');
   });
   
   $('#metadiscussion_link').click(function() {
     connection.emit('roomChange', 'meta');
-    vm.roomName('Metadiscussion');
+    vm.currentRoom('Metadiscussion');
   });
+  */
   
   //Set up our Bootstrap stuff
   //TODO: Refactor into third file
@@ -140,7 +143,12 @@
   });
   
   //Room tabs
-  //ROOMFIX
+  //Still need to think about how we're going to determine what room the message was sent from
+  //Answer:event delegation!
+  $('#roomTabs').click(function(e) {
+    vm.currentRoom(e.target.getAttribute('data-room-id'));
+  });
+  /*
   $('#generalTab').click(function(e) {
     e.preventDefault();
     currentRoom = 'general';
@@ -152,6 +160,7 @@
     currentRoom = 'meta';
     $(this).tab('show');
   });
+*/
   
   //Send a message if the user hits the enter key
   $input.keydown(function(e) {
@@ -162,8 +171,13 @@
       if (!msg) {
         return;
       }
-      connection.emit('message', {room: currentRoom, data: msg});
+      connection.emit('message', {room: vm.currentRoom(), data: msg});
       $input.attr('disabled', 'disabled');
     }
   });
+  
+  //First tab is the one selected
+  //Using += so it won't break things in the future.
+  $('#roomTabs li')[0].className += ' active';
+  $('#messages div div')[0].className += ' active';
 }(this);

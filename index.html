@@ -12,33 +12,25 @@
     <div class="container">
       <div id="header">
         <div class="page-header clearfix">
-            <h3 class="pull-left" id="roomTitle" data-bind="text: roomName"></h3>
-            <!-- Yes, I know these don't actually go anywhere -->
+            <h3 class="pull-left" id="roomTitle">Kittens Chat</h3>
             <ul class="nav nav-pills pull-right">
-                <li class="active"><a href="#aboutModal" data-toggle="modal">About</a></li>
-                <li class="active"><a href="#">Help</a></li>
-                <li class="active"><a href="https://github.com/SomeKittens/Kittens-Chat/issues" target="_blank">Contact</a></li>
+              <li class="active"><a href="#aboutModal" data-toggle="modal">About</a></li>
+              <!-- Yeah, yeah, TODO.  If you're looking at it, why don't you fix it yourself, ya smart aleck? 
+                https://github.com/SomeKittens/Kittens-Chat-->
+              <li class="active"><a href="#">Help</a></li>
+              <li class="active"><a href="https://github.com/SomeKittens/Kittens-Chat/issues" target="_blank">Contact</a></li>
             </ul>
         </div>
       </div>
       <div id="content" class="tabbable">
         <div id="blah">
-        <ul class="nav nav-tabs" data-tabs="tabs">
-          <!-- ROOMFIX -->
-          <li class="active"><a href="#general" data-toggle="tab" id="generalTab">General Chat</a></li>
-          <li><a href="#meta" data-toggle="tab" id="metaTab">Metadiscussion of Kittens Chat</a></li>
+        <ul id="roomTabs" class="nav nav-tabs" data-tabs="tabs" data-bind="foreach: rooms">
+          <li><a data-bind="text: name, attr: {id: tag + 'Tab', href: '#' + tag, 'data-room-id': id}" data-toggle="tab"></a></li>
         </ul>
         </div>
         <div id="messages">
-          <div class="tab-content">
-            <div class="tab-pane active" id="general" data-bind="foreach: general">
-              <p>
-                <span data-bind="text: author, style: {'color': color}"></span>
-                <span data-bind="text: $root.timestamp(time)"></span>
-                <span data-bind="html: text"></span>
-              </p>
-            </div>
-            <div class="tab-pane" id="meta" data-bind="foreach: meta">
+          <div class="tab-content" data-bind="foreach: rooms">
+            <div class="tab-pane" data-bind="attr: {id: tag}, foreach: history">
               <p>
                 <span data-bind="text: author, style: {'color': color}"></span>
                 <span data-bind="text: $root.timestamp(time)"></span>
@@ -82,14 +74,6 @@
         <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
       </div>
     </div>
-    <!-- Not needed at this point, will add to "about" in the future
-        TODO: Have this be a modal when people click "about"
-        <div class="page-header" id="page-info">
-            <button type="button" class="close" title="Hide Information">×</button>
-            <p class="lead">Welcome to the room! All conversations are private and nothing is saved when the room is destroyed. Talk about anything.</p>
-            <p>See <a href="#">Privacy Policy</a> for more information.</p>
-        </div>
-        -->
   </body>
   <!-- IMPORT ALL THE LIBRARIES -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>

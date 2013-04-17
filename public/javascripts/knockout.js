@@ -7,22 +7,56 @@
     var self = this;
     
     //daytums
-    //ROOMFIX
-    self.general = ko.observableArray([]);
-    self.meta = ko.observableArray([]);
+    self.rooms = ko.observableArray([
+      //TODO: subscribe to individual rooms
+      {
+        id: 0,
+        name: 'General Chat',
+        tag: 'general',
+        history: ko.observableArray([{
+          author: 'Kittens',
+          color: 'green',
+          text: 'Laura Ip\'s son',
+          time: new Date()
+        }]),
+        occupants: []
+      },
+      {
+        id: 1,
+        name: 'Metadiscussion',
+        tag: 'meta',
+        history: ko.observableArray([]),
+        occupants: []
+      }
+    ]);
     self.hasFocus = true;
-    self.roomName = ko.observable('General Chat');
+    
+    //ID of current room
+    self.currentRoom = ko.observable(0);
     
     //We set the inital name to 'Connecting...' because management told us it conformed with ISO9001 standards
     self.username = ko.observable('Connecting...');
     self.usercolor = ko.observable();
     
     //Number-crunching things
+    //Create a nice-looking timestamp for messages
     self.timestamp = function(dt) {
       //Broke this into several variables instead of one giant one for readability
       var hours = dt.getHours() < 10 ? '0' + dt.getHours() : dt.getHours()
         , minutes = dt.getMinutes() < 10 ? '0' + dt.getMinutes() : dt.getMinutes();
-      return ' (' + hours + ':' + minutes + ')'; 
+      return ' (' + hours + ':' + minutes + ')';
+    };
+    
+    //Add a message to all of the rooms
+    self.broadcast = function(message) {
+      ko.utils.arrayForEach(self.rooms(), function(room) {
+        room.history.push({
+          author: 'System',
+          color: 'black',
+          text: message,
+          time: new Date()
+        });
+      }); 
     };
   };
 
@@ -57,11 +91,13 @@
     
     //Change the tab title if the chat doesn't have focus
     if(!vm.hasFocus) {
-      document.title = '*New messages in ' + vm.roomName();
+      document.title = '*New messages in ' + vm.rooms()[vm.currentRoom()].name;
     }
   };
-  vm.general.subscribe(scrollToBottom);
-  vm.meta.subscribe(scrollToBottom);
+  
+  //ROOMFIX
+ // vm.general.subscribe(scrollToBottom);
+ // vm.meta.subscribe(scrollToBottom);
   
   ko.applyBindings(vm);
 
@@ -69,7 +105,7 @@
   window.onfocus = function() {
     //Workaround for Chrome bug
     //http://stackoverflow.com/a/2952386/1216976
-    window.setTimeout(function () { document.title = vm.roomName(); }, 200);
+    window.setTimeout(function () { document.title = vm.rooms()[vm.currentRoom()].name; }, 200);
     vm.hasFocus = true;
   };
   window.onblur = function() {
