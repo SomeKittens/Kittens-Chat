@@ -65,23 +65,9 @@
   
   //System wants to announce something important.
   //Goes out to all rooms
+  //`message` is only a string
   connection.on('announce', function(message) {
     vm.broadcast(message);
-    /*
-    vm.rooms.forEach
-    vm.general.push({
-      author: 'System',
-      color: 'black',
-      text: message,
-      time: new Date()
-    });
-    vm.meta.push({
-      author: 'System',
-      color: 'black',
-      text: message,
-      time: new Date()
-    });
-*/
   });
   
   //Failed connection?  Let's let our user know about it
@@ -98,20 +84,9 @@
     connection.emit('remind', {username: vm.username(), color: vm.usercolor()});
   });
   
-  //Add roomchange events on clicking the room buttons
+  //TODO: Add roomchange events when joining/leaving
   //We don't need to alert the server when the user changes rooms
   //What we *do* need to tell the server is what room the user has sent a message to
-  /*
-  $('#general_chat_link').click(function() {
-    connection.emit('roomChange', 'general');
-    vm.currentRoom('General Chat');
-  });
-  
-  $('#metadiscussion_link').click(function() {
-    connection.emit('roomChange', 'meta');
-    vm.currentRoom('Metadiscussion');
-  });
-  */
   
   //Set up our Bootstrap stuff
   //TODO: Refactor into third file
