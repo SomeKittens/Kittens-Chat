@@ -125,6 +125,8 @@
   $nameModal.on('hide', function() {
     vm.username($usernameSelect.val());
     connection.emit('login', {username: vm.username()});
+    //FIXME When we move to user-defined rooms, this'll break.
+    document.title = 'General Chat';
   });
   
   //User can press enter instead of clicking the button
@@ -147,20 +149,9 @@
   //Answer:event delegation!
   $('#roomTabs').click(function(e) {
     vm.currentRoom(e.target.getAttribute('data-room-id'));
+    console.log(e.target.innerHTML);
+    document.title = e.target.innerHTML;
   });
-  /*
-  $('#generalTab').click(function(e) {
-    e.preventDefault();
-    currentRoom = 'general';
-    $(this).tab('show');
-  });
-  
-  $('#metaTab').click(function(e) {
-    e.preventDefault();
-    currentRoom = 'meta';
-    $(this).tab('show');
-  });
-*/
   
   //Send a message if the user hits the enter key
   $input.keydown(function(e) {

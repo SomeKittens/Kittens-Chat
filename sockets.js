@@ -54,7 +54,8 @@ exports.start = function(server) {
     
     //Default room (Empty string room is for system broadcasts)
     //TODO: system broadcasts
-    //socket.join(userRoom);
+    socket.join(0);
+    socket.join(1);
     
     //Message is ONLY for sending us a chat message
     socket.on('message', function (payload) {
@@ -91,7 +92,6 @@ exports.start = function(server) {
       };
       
       //Add message to history
-      //TODO: Not DRY
       chatHistory[payload.room].push(messagePackage);
       
       //The chat message object
